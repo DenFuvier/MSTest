@@ -6,41 +6,45 @@ using System.Threading.Tasks;
 namespace Army
 {
 
-    public class TestPeople
+    namespace Army
     {
-        public int TotalConscripts { get; private set; }
-        public int RejectedConscripts { get; private set; }
 
-        public void addPrizivnik(PrizivnikInfo prizivnik)
+        public class TestPeople
         {
-            TotalConscripts++;
-            if (!IsFitForService(prizivnik))
+            public int ColVoPriziv { get; private set; }
+            public int ColVoOtclon { get; private set; }
+
+            public void addPrizivnik(PrizivnikInfo prizivnik)
             {
-                RejectedConscripts++;
+                ColVoPriziv++;
+                if (!IsFitForService(prizivnik))
+                {
+                    ColVoOtclon++;
+                }
+            }
+
+            public double CalculateSuccessRate()
+            {
+                if (ColVoPriziv == 0)
+                    return 0;
+
+                return (double)(ColVoPriziv - ColVoOtclon) / ColVoPriziv * 100;
+            }
+
+            private bool IsFitForService(PrizivnikInfo prizivnik)
+            {
+                return prizivnik.Age >= 18;
             }
         }
 
-        public double CalculateSuccessRate()
+        public class PrizivnikInfo
         {
-            if (TotalConscripts == 0)
-                return 0;
+            public int Age { get; set; }
 
-            return (double)(TotalConscripts - RejectedConscripts) / TotalConscripts * 100;
-        }
-
-        private bool IsFitForService(PrizivnikInfo prizivnik)
-        {
-            return prizivnik.Age >= 18;
-        }
-    }
-
-    public class PrizivnikInfo
-    {
-        public int Age { get; set; }
-
-        public PrizivnikInfo(int age)
-        {
-            Age = age;
+            public PrizivnikInfo(int age)
+            {
+                Age = age;
+            }
         }
     }
 
